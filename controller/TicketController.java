@@ -1,6 +1,9 @@
 package controller;
 import dto.GenerateTicketRequestDto;
 import dto.GenerateTicketResponseDto;
+import dto.ResponseStatus;
+import exception.NoParkingSpotAvailableException;
+import models.Ticket;
 import service.TicketService;
 
 /*First layer of client interaction
@@ -26,8 +29,20 @@ public class TicketController {
         this.ticketService=ticketService;
     }
     public GenerateTicketResponseDto generateTicket(GenerateTicketRequestDto generateTicketRequestDto){
-        ticketService.generateTicket(generateTicketRequestDto);
-        return null;
+        try{
+            Ticket ticket=ticketService.generateTicket(generateTicketRequestDto.getVehicleNumber(),
+                    generateTicketRequestDto.getVehicleType(),
+                    generateTicketRequestDto.getGateId());
+            GenerateTicketResponseDto response = new GenerateTicketResponseDto();
+            response.setResponseStatus(ResponseStatus.SUCCESS);
+            response.setTicket(ticket);
+            return response;
+        }catch (NoParkingSpotAvailableException noParkingSpotAvailableException){
+            GenerateTicketResponseDto response = new GenerateTicketResponseDto();
+            response.setResponseStatus(ResponseStatus.FAILURE);
+            return  response;
+        }
+
     }
 }
 /*

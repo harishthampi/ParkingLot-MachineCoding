@@ -8,6 +8,9 @@ import java.util.Vector;
 
 public class VehicleService {
     private VehicleRepository vehicleRepository;
+    public VehicleService(){
+
+    }
     public VehicleService(VehicleRepository vehicleRepository){
         this.vehicleRepository=vehicleRepository;
     }
